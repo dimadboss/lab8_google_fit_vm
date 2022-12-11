@@ -1,11 +1,16 @@
 package com.example.lab8_google_fit.ui.main
 
+import android.Manifest
+import android.content.pm.PackageManager
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.example.lab8_google_fit.MainActivity
 import com.example.lab8_google_fit.R
 
 class MainFragment : Fragment() {
@@ -20,6 +25,7 @@ class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
+        viewModel.init(this.activity as MainActivity)
     }
 
     override fun onCreateView(
