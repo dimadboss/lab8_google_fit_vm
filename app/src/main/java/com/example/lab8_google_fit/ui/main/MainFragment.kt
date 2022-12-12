@@ -39,7 +39,6 @@ class MainFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
         mainActivity = this.activity as MainActivity
         viewModel.init(mainActivity)
         viewModel.getSteps(mainActivity)
@@ -68,10 +67,17 @@ class MainFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             datePickerDialog.show()
         }
 
+        mainActivity.findViewById<Button>(R.id.addSteps).setOnClickListener {
+            if (!addStepsBtnEnabled()) {
+                return@setOnClickListener
+            }
+            viewModel.addSteps(mainActivity, myDateTime!!, myStepsCount!!)
+        }
+
         mainActivity.findViewById<SeekBar>(R.id.seekBar)
             .setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                    myStepsCount = progress
+                    myStepsCount = progress * 400
                     updateUI()
                 }
 
@@ -109,6 +115,11 @@ class MainFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             title += " — $myStepsCount steps"
         }
         mainActivity.findViewById<TextView>(R.id.selectedDateTime).text = title
+        mainActivity.findViewById<Button>(R.id.addSteps).isEnabled = addStepsBtnEnabled()
+    }
+
+    private fun addStepsBtnEnabled(): Boolean {
+        return myDateTime != null && myStepsCount != null && (myStepsCount ?: 0) > 0
     }
 
     override fun onCreateView(

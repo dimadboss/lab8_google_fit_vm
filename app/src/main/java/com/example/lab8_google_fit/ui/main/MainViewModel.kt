@@ -59,7 +59,7 @@ class MainViewModel : ViewModel() {
             return
         }
 
-        val startTime = timestamp.atZone(ZoneId.systemDefault())
+        val startTime = timestamp.atZone(ZoneOffset.UTC)
         val endTime = startTime.plusHours(1)
 
         val dataSource = DataSource.Builder()
@@ -87,6 +87,7 @@ class MainViewModel : ViewModel() {
             .insertData(dataSet)
             .addOnSuccessListener {
                 Log.i(TAG, "DataSet ([$startTime, $endTime]; $count) added successfully!")
+                getSteps(activity)
             }
             .addOnFailureListener { e ->
                 Log.w(TAG, "There was an error adding the DataSet", e)
