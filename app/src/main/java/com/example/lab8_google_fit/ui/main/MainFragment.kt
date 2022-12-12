@@ -49,7 +49,7 @@ class MainFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         listView = mainActivity.findViewById(R.id.steps_list_view)
 
         val nameObserver = Observer<MutableList<StepsData>> { newList ->
-            val adapter = MyAdapter(requireContext(), newList)
+            val adapter = MyAdapter(requireContext(), mainActivity, newList, viewModel)
             listView.adapter = adapter
         }
 

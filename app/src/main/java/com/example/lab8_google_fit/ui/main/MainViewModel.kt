@@ -10,6 +10,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
+import com.google.android.gms.fitness.request.DataDeleteRequest
 import com.google.android.gms.fitness.request.DataReadRequest
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -93,6 +94,32 @@ class MainViewModel : ViewModel() {
                 Log.w(TAG, "There was an error adding the DataSet", e)
             }
     }
+
+    fun removeSteps(activity: Activity, timestamp: LocalDateTime) {
+        if (!this::account.isInitialized) {
+            Log.w(TAG, "account is not initialized")
+            return
+        }
+
+        val startTime = timestamp.atZone(ZoneOffset.UTC)
+        val endTime = startTime.plusHours(1)
+
+        val request = DataDeleteRequest.Builder()
+            .setTimeInterval(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
+            .addDataType(DataType.TYPE_STEP_COUNT_DELTA)
+            .build()
+
+        Fitness.getHistoryClient(activity, account)
+            .deleteData(request)
+            .addOnSuccessListener {
+                Log.i(TAG, "Data ([$startTime, $endTime]) deleted successfully!")
+                getSteps(activity)
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "There was an error with the deletion request", e)
+            }
+    }
+
 
     fun getSteps(activity: Activity) {
         if (!this::account.isInitialized) {

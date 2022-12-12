@@ -6,10 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
+import com.example.lab8_google_fit.MainActivity
 import com.example.lab8_google_fit.R
 import com.example.lab8_google_fit.data.StepsData
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MyAdapter(private val context: Context, private val arrayList: MutableList<StepsData>) :
+class MyAdapter(
+    private val context: Context,
+    private val activity: MainActivity,
+    private val arrayList: MutableList<StepsData>,
+    private val viewModel: MainViewModel,
+) :
     BaseAdapter() {
     override fun getCount(): Int {
         return arrayList.size
@@ -29,6 +36,9 @@ class MyAdapter(private val context: Context, private val arrayList: MutableList
             arrayList[position].timestamp.toString()
         convertViewCopy.findViewById<TextView>(R.id.countSteps).text =
             arrayList[position].count.toString()
+        convertViewCopy.findViewById<FloatingActionButton>(R.id.btnRemove).setOnClickListener {
+            viewModel.removeSteps(activity, arrayList[position].timestamp)
+        }
 
         return convertViewCopy
     }
