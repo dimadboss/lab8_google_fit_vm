@@ -61,7 +61,7 @@ class MainViewModel : ViewModel() {
         }
 
         val startTime = timestamp.atZone(ZoneOffset.UTC)
-        val endTime = startTime.plusHours(1)
+        val endTime = startTime.plusMinutes(59)
 
         val dataSource = DataSource.Builder()
             .setAppPackageName(activity)
@@ -102,7 +102,7 @@ class MainViewModel : ViewModel() {
         }
 
         val startTime = timestamp.atZone(ZoneOffset.UTC)
-        val endTime = startTime.plusHours(1)
+        val endTime = startTime.plusMinutes(59)
 
         val request = DataDeleteRequest.Builder()
             .setTimeInterval(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
