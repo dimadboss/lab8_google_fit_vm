@@ -14,6 +14,7 @@ import com.google.android.gms.fitness.request.DataReadRequest
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
 import java.util.concurrent.TimeUnit
 
 const val MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION = 1
@@ -98,7 +99,7 @@ class MainViewModel : ViewModel() {
             return
         }
 
-        val endTime = LocalDateTime.now().atZone(ZoneId.systemDefault())
+        val endTime = LocalDateTime.now().atZone(ZoneOffset.UTC).truncatedTo(ChronoUnit.HOURS)
         val startTime = endTime.minusDays(7)
 
         val endSeconds = endTime.toEpochSecond()
@@ -128,6 +129,7 @@ class MainViewModel : ViewModel() {
                     )
                     result.add(StepsData(ts, cnt))
                 }
+                result.sortByDescending { it.timestamp }
                 stepsListLive.value = result
             }
             .addOnFailureListener { e ->

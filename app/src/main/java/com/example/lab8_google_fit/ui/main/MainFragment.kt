@@ -38,20 +38,11 @@ class MainFragment : Fragment() {
         listView = mainActivity.findViewById(R.id.steps_list_view)
 
         val nameObserver = Observer<MutableList<StepsData>> { newList ->
-            val recipeList = newList//viewModel.stepsListLive.value ?: mutableListOf<StepsData>()
-            val listItems = arrayOfNulls<String>(recipeList.size)
-            for (i in 0 until recipeList.size) {
-                val recipe = recipeList[i]
-                listItems[i] = recipe.timestamp.toString()
-            }
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, listItems)
+            val adapter = MyAdapter(requireContext(), newList)
             listView.adapter = adapter
         }
 
         viewModel.stepsListLive.observe(viewLifecycleOwner, nameObserver)
-
-
-
     }
 
     override fun onCreateView(
